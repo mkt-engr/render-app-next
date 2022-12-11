@@ -2,12 +2,12 @@ import { GetStaticProps } from "next";
 import axios from "axios";
 import { FC } from "react";
 
-const Example = ({ data }) => {
+const Example = ({ data }: { data: any }) => {
   console.log(data, "in Example ");
   return (
     <div>
       <ul>
-        {data.map((i) => {
+        {data.map((i: any) => {
           return (
             <li key={i.id}>
               {i.id}:{i.name}
