@@ -18,10 +18,10 @@ const Example: NextPage<Props> = ({ tasks }) => {
   return (
     <div>
       <ul>
-        {tasks.map((i) => {
+        {tasks.map((task) => {
           return (
-            <li key={i.id}>
-              {i.content}:{i.done ? "済" : "未"}
+            <li key={task.id}>
+              {task.content}:{task.done ? "済" : "未"}
             </li>
           );
         })}
