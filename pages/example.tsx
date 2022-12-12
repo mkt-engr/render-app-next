@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   Avatar,
   Box,
+  Checkbox,
   Grid,
   IconButton,
   InputBase,
@@ -13,7 +14,6 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
@@ -37,6 +37,19 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     console.log("handleSubmit", e);
+  };
+
+  const handleTaskStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTasks((prevTasks) => {
+      const newTasks = prevTasks.map((task) => {
+        const selectedTaskId = Number(e.target.value);
+        if (task.id === selectedTaskId) {
+          return { ...task, done: !task.done };
+        }
+        return task;
+      });
+      return newTasks;
+    });
   };
   return (
     <div>
@@ -71,11 +84,12 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                 {tasks.map((task) => {
                   return (
                     <ListItem key={task.id}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FolderIcon />
-                        </Avatar>
-                      </ListItemAvatar>
+                      <Checkbox
+                        sx={{ pl: 0 }}
+                        checked={task.done}
+                        value={task.id}
+                        onChange={handleTaskStatus}
+                      />
                       <ListItemText primary={task.content} />
                       <IconButton edge="end" aria-label="delete">
                         <DeleteIcon />
