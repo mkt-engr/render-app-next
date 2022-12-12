@@ -1,16 +1,27 @@
-import { GetStaticProps } from "next";
+import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
-const Example = ({ data }: { data: any }) => {
+type Task = {
+  id: number;
+  content: string;
+  done: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+type Props = {
+  data: Task[];
+};
+const Example: NextPage<Props> = ({ data }) => {
   console.log(data, "in Example ");
+
   return (
     <div>
       <ul>
-        {data.map((i: any) => {
+        {data.map((i) => {
           return (
             <li key={i.id}>
-              {i.id}:{i.name}
+              {i.content}:{i.done ? "済" : "未"}
             </li>
           );
         })}
@@ -22,11 +33,13 @@ const Example = ({ data }: { data: any }) => {
 export default Example;
 
 export const getServerSideProps = async () => {
-  const res = await axios.get(`https://jsonplaceholder.typicode.com/users`, {
+  console.log(process.env.HOST, "HOST");
+  const res = await axios.get(`${process.env.HOST}/tasks`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
   });
 
   const data = res.data;
+  console.log(data);
   return {
     props: {
       data,
