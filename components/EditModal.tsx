@@ -34,8 +34,6 @@ const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            type="email"
             fullWidth
             variant="standard"
             defaultValue={task.content}
@@ -44,9 +42,7 @@ const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Save</Button>
-        <Button onClick={handleClose} autoFocus>
-          Cancel
-        </Button>
+        <Button onClick={handleClose}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
