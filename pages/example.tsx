@@ -24,6 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { SyntheticEvent, useState } from "react";
+import EditModal from "../components/EditModal";
 
 type Task = {
   id: number;
@@ -43,6 +44,7 @@ type Props = {
 //TODO:ゴミ箱ボタン押したら物理削除する
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
+  const [selectedTask, setSelectedTask] = useState(staticTasks[0]);
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     console.log("handleSubmit", e);
@@ -63,13 +65,11 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
 
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (task: Task) => {
+    setSelectedTask(task);
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <>
       <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
@@ -120,7 +120,9 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                         <IconButton
                           edge="end"
                           aria-label="edit"
-                          onClick={handleClickOpen}
+                          onClick={() => {
+                            handleClickOpen(task);
+                          }}
                         >
                           <EditIcon />
                         </IconButton>
@@ -137,35 +139,12 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
         </Grid>
       </Box>
 
-      <Dialog
+      <EditModal
+        handleClickOpen={handleClickOpen}
         open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        fullWidth
-        maxWidth={"sm"}
-      >
-        <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              type="email"
-              fullWidth
-              variant="standard"
-              defaultValue=""
-            />
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Save</Button>
-          <Button onClick={handleClose} autoFocus>
-            Cancel
-          </Button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpen}
+        task={selectedTask}
+      />
     </>
   );
 };
