@@ -1,6 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import { FC, useEffect } from "react";
 
 type Task = {
   id: number;
@@ -9,16 +8,17 @@ type Task = {
   createdAt: Date;
   updatedAt: Date;
 };
+
 type Props = {
-  data: Task[];
+  tasks: Task[];
 };
-const Example: NextPage<Props> = ({ data }) => {
-  console.log(data, "in Example ");
+const Example: NextPage<Props> = ({ tasks }) => {
+  console.log(tasks, "in Example ");
 
   return (
     <div>
       <ul>
-        {data.map((i) => {
+        {tasks.map((i) => {
           return (
             <li key={i.id}>
               {i.content}:{i.done ? "済" : "未"}
@@ -32,7 +32,7 @@ const Example: NextPage<Props> = ({ data }) => {
 
 export default Example;
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetStaticProps = async () => {
   console.log(process.env.HOST, "HOST");
   const res = await axios.get(`${process.env.HOST}/tasks`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
@@ -42,7 +42,7 @@ export const getServerSideProps = async () => {
   console.log(data);
   return {
     props: {
-      data,
+      tasks: data,
     },
   };
 };
