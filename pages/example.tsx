@@ -2,7 +2,13 @@ import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
 import {
   Box,
+  Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControlLabel,
   Grid,
   IconButton,
@@ -37,7 +43,6 @@ type Props = {
 //TODO:ゴミ箱ボタン押したら物理削除する
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
-  const [isEditMode, setEditMode] = useState(false);
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     console.log("handleSubmit", e);
@@ -56,8 +61,17 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
     });
   };
 
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
-    <div>
+    <>
       <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
         <Grid container spacing={0}>
           <Grid item xs={12} md={12}>
@@ -81,6 +95,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                   type="button"
                   sx={{ p: "10px" }}
                   aria-label="search"
+                  onClick={handleSubmit}
                 >
                   <AddIcon />
                 </IconButton>
@@ -105,11 +120,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                         <IconButton
                           edge="end"
                           aria-label="edit"
-                          onClick={() => {
-                            setEditMode((prev) => {
-                              return !prev;
-                            });
-                          }}
+                          onClick={handleClickOpen}
                         >
                           <EditIcon />
                         </IconButton>
@@ -125,7 +136,37 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
           </Grid>
         </Grid>
       </Box>
-    </div>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={"sm"}
+      >
+        <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              type="email"
+              fullWidth
+              variant="standard"
+              defaultValue=""
+            />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Save</Button>
+          <Button onClick={handleClose} autoFocus>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
