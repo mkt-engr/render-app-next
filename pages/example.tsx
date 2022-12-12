@@ -1,11 +1,8 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
-import Button from "@mui/material/Button";
 import {
   Avatar,
   Box,
-  Container,
-  Divider,
   Grid,
   IconButton,
   InputBase,
@@ -14,18 +11,12 @@ import {
   ListItemAvatar,
   ListItemText,
   Paper,
-  styled,
-  TextField,
   Typography,
 } from "@mui/material";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import DirectionsIcon from "@mui/icons-material/Directions";
-import React, { useState } from "react";
 
 type Task = {
   id: number;
