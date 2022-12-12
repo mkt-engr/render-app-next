@@ -17,6 +17,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import { SyntheticEvent, useState } from "react";
 
 type Task = {
   id: number;
@@ -27,10 +28,16 @@ type Task = {
 };
 
 type Props = {
-  tasks: Task[];
+  staticTasks: Task[];
 };
-
-const Example: NextPage<Props> = ({ tasks }) => {
+//TODO: タスクをDBに追加→レスポンスのタスクをuseStateに保存
+//TODO:RHFでonSubmitした時に値を取得する
+const Example: NextPage<Props> = ({ staticTasks }) => {
+  const [tasks, setTasks] = useState(staticTasks);
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+    console.log("handleSubmit", e);
+  };
   return (
     <div>
       <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
@@ -39,48 +46,48 @@ const Example: NextPage<Props> = ({ tasks }) => {
             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
               Please Add Your Task!!
             </Typography>
-
-            <Paper
-              component="form"
-              sx={{
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="New Task"
-                inputProps={{ "aria-label": "new task" }}
-              />
-              <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-                <AddIcon />
-              </IconButton>
-            </Paper>
-            <List>
-              {tasks.map((task) => {
-                return (
-                  <ListItem
-                    key={task.id}
-                    secondaryAction={
+            <form onSubmit={handleSubmit}>
+              <Paper
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="New Task"
+                  inputProps={{ "aria-label": "new task" }}
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                >
+                  <AddIcon />
+                </IconButton>
+              </Paper>
+              <List>
+                {tasks.map((task) => {
+                  return (
+                    <ListItem key={task.id}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <FolderIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={task.content} />
+                      <IconButton edge="end" aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
                       <IconButton edge="end" aria-label="edit">
                         <EditIcon />
                       </IconButton>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <Avatar>
-                        <FolderIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={task.content} />
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItem>
-                );
-              })}
-            </List>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </form>
           </Grid>
         </Grid>
       </Box>
@@ -99,7 +106,7 @@ export const getServerSideProps: GetStaticProps = async () => {
   const data = res.data;
   return {
     props: {
-      tasks: data,
+      staticTasks: data,
     },
   };
 };
