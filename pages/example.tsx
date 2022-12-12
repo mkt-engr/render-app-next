@@ -1,17 +1,17 @@
 import { GetStaticProps, NextPage } from "next";
 import axios from "axios";
 import {
-  Avatar,
   Box,
   Checkbox,
+  FormControlLabel,
   Grid,
   IconButton,
   InputBase,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   Paper,
+  TextField,
   Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -32,8 +32,12 @@ type Props = {
 };
 //TODO: タスクをDBに追加→レスポンスのタスクをuseStateに保存
 //TODO:RHFでonSubmitした時に値を取得する
+//TODO:タスクがDoneになった時テキストに線を入れる
+//TODO:Editボタン押したらモーダルで編集できるように
+//TODO:ゴミ箱ボタン押したら物理削除する
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
+  const [isEditMode, setEditMode] = useState(false);
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     console.log("handleSubmit", e);
@@ -51,6 +55,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
       return newTasks;
     });
   };
+
   return (
     <div>
       <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
@@ -84,19 +89,34 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                 {tasks.map((task) => {
                   return (
                     <ListItem key={task.id}>
-                      <Checkbox
-                        sx={{ pl: 0 }}
-                        checked={task.done}
-                        value={task.id}
-                        onChange={handleTaskStatus}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            sx={{ pl: 0 }}
+                            checked={task.done}
+                            value={task.id}
+                            onChange={handleTaskStatus}
+                          />
+                        }
+                        label={task.content}
                       />
-                      <ListItemText primary={task.content} />
-                      <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="edit">
-                        <EditIcon />
-                      </IconButton>
+                      {/* <ListItemText primary={task.content} /> */}
+                      <Box sx={{ ml: "auto" }}>
+                        <IconButton
+                          edge="end"
+                          aria-label="edit"
+                          onClick={() => {
+                            setEditMode((prev) => {
+                              return !prev;
+                            });
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton edge="end" aria-label="delete">
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
                     </ListItem>
                   );
                 })}
