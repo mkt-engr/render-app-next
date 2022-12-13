@@ -16,7 +16,6 @@ export default async function handler(
       const options: AxiosRequestConfig = {
         url: `${process.env.HOST}/tasks`,
         method: "GET",
-        headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
       const r: AxiosResponse<Task[]> = await axios(options);
       const { data } = r;
@@ -29,7 +28,6 @@ export default async function handler(
         url: `${process.env.HOST}/tasks`,
         method: "POST",
         data: body,
-        headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
       const r2: AxiosResponse<Task> = await axios(optionsPost);
       const { data: dataPost } = r2;

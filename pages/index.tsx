@@ -30,15 +30,19 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
   const [newTask, setNewTask] = useState("");
   const [selectedTask, setSelectedTask] = useState(staticTasks[0]);
+  const [deletedTaskId, setDeletedTaskId] = useState(0);
+  const [open, setOpen] = useState(false);
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const options: AxiosRequestConfig = {
+
+    const optionsPost: AxiosRequestConfig = {
       url: "api/task",
       method: "POST",
       data: { content: newTask },
-      headers: { "Accept-Encoding": "gzip,deflate,compress" },
     };
-    const { data } = await axios(options);
+    const { data } = await axios(optionsPost);
+    if (!data) return;
     setTasks((prev) => {
       return [...prev, data];
     });
@@ -49,7 +53,6 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
     const options: AxiosRequestConfig = {
       url: `api/task/${id}`,
       method: "DELETE",
-      headers: { "Accept-Encoding": "gzip,deflate,compress" },
     };
     const { data } = await axios(options);
     setTasks((prev) => {
@@ -72,8 +75,6 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
       return newTasks;
     });
   };
-
-  const [open, setOpen] = useState(false);
 
   const handleClickOpen = (task: Task) => {
     setSelectedTask(task);
@@ -143,8 +144,10 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                           edge="end"
                           aria-label="delete"
                           onClick={() => {
+                            setDeletedTaskId(task.id);
                             handleDelete(task.id);
                           }}
+                          disabled={task.id === deletedTaskId}
                         >
                           <DeleteIcon />
                         </IconButton>

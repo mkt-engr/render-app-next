@@ -44,7 +44,7 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
     const options: AxiosRequestConfig = {
       url: `api/task/${id}`,
       method: "PATCH",
-      headers: { "Accept-Encoding": "gzip,deflate,compress" },
+
       data: { content: editedContent },
     };
 

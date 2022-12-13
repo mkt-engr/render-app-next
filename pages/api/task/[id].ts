@@ -17,7 +17,6 @@ export default async function taskHandler(
         url: `${process.env.HOST}/tasks/${id}`,
         method: "PATCH",
         data: body,
-        headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
       const r1: AxiosResponse<number> = await axios(optionsPatch);
       const { data: patchedId } = r1;
@@ -29,7 +28,6 @@ export default async function taskHandler(
       const optionsDelete = {
         url: `${process.env.HOST}/tasks/${id}`,
         method: "DELETE",
-        headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
       const r3: AxiosResponse<number> = await axios(optionsDelete);
       const { data: deletedId } = r3;
