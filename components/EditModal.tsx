@@ -24,32 +24,43 @@ type Props = {
 };
 const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
   const [editedContent, setEditedContent] = useState(task?.content || "");
-
+  console.log({ editedContent }, "EditModalの最初");
   const handleClose = () => {
     setEditedContent(task.content);
     setOpen(false);
   };
   const handleSubmit = (
     e: SyntheticEvent,
-    id: number,
+    task: Task,
     editedContent: string
   ) => {
     e.preventDefault();
-    handleSave(id, editedContent);
+    handleClose();
+    console.log({ editedContent, task: task.content }, "handleSubmitの中");
+    if (task.content === editedContent) {
+      console.log("タスクの中身は変更されてない");
+      return;
+    }
+    setEditedContent(editedContent);
+
+    handleSave(task, editedContent);
   };
 
-  const handleSave = async (id: number, editedContent: string) => {
+  const handleSave = async (task: Task, editedContent: string) => {
+    const { id } = task;
+
     handleClose();
 
     const options: AxiosRequestConfig = {
       url: `api/task/${id}`,
       method: "PATCH",
-
+      headers: { "Accept-Encoding": "gzip,deflate,compress" },
       data: { content: editedContent },
     };
 
     const { data } = await axios(options);
 
+    setEditedContent(editedContent);
     setTasks((prevTasks: Task[]) => {
       const newTasks = prevTasks.map((task) => {
         if (task.id !== data.id) return task;
@@ -70,7 +81,7 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
     >
       <form
         onSubmit={(e) => {
-          handleSubmit(e, task.id, editedContent);
+          handleSubmit(e, task, editedContent);
         }}
       >
         <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
@@ -80,8 +91,9 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
             margin="dense"
             fullWidth
             variant="standard"
-            defaultValue={task?.content || ""}
+            defaultValue={editedContent}
             onChange={(e) => {
+              // console.log(e.target.value, "TextField");
               setEditedContent(e.target.value);
             }}
           />
@@ -89,7 +101,9 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
         <DialogActions>
           <Button
             onClick={() => {
-              handleSave(task.id, editedContent);
+              console.log({ task: task.content, editedContent });
+
+              handleSave(task, editedContent);
             }}
           >
             Save
