@@ -21,7 +21,6 @@ export default async function taskHandler(
       };
       const r1: AxiosResponse<number> = await axios(optionsPatch);
       const { data: patchedId } = r1;
-      console.log(patchedId, "patch");
       res.status(200).json(patchedId);
       break;
 

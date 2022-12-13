@@ -12,7 +12,6 @@ export default async function handler(
   const { method, body } = req;
   switch (method) {
     case "GET":
-      console.log(process.env.HOST, "api routes");
       // Get data from your database
       const options: AxiosRequestConfig = {
         url: `${process.env.HOST}/tasks`,

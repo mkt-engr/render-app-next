@@ -70,7 +70,6 @@ const EditModal = ({ open, setOpen, task, setTasks }: any) => {
             variant="standard"
             defaultValue={task.content}
             onChange={(e) => {
-              console.log(e.target.value);
               setEditedContent(e.target.value);
             }}
           />
