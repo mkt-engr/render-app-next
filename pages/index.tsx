@@ -23,9 +23,6 @@ type Props = {
   staticTasks: Task[];
 };
 
-//TODO:RHFでonSubmitした時に値を取得する
-//TODO:タスクがDoneになった時テキストに線を入れる
-
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
   const [newTask, setNewTask] = useState("");
@@ -123,15 +120,17 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            sx={{ pl: 0 }}
                             checked={task.done}
                             value={task.id}
                             onChange={handleTaskStatus}
                           />
                         }
                         label={task.content}
+                        sx={{
+                          textDecoration: task.done ? "line-through" : "auto",
+                        }}
                       />
-                      <Box sx={{ ml: "auto" }}>
+                      <Box sx={{ ml: "auto", mr: "4px" }}>
                         <IconButton
                           edge="end"
                           aria-label="edit"
