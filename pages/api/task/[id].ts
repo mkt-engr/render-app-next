@@ -28,6 +28,7 @@ export default async function taskHandler(
       const optionsDelete = {
         url: `${process.env.HOST}/tasks/${id}`,
         method: "DELETE",
+        headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
       const r3: AxiosResponse<number> = await axios(optionsDelete);
       const { data: deletedId } = r3;
