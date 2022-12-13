@@ -85,7 +85,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
         <Grid container spacing={0}>
           <Grid item xs={12} md={12}>
             <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-              Please Add Your Task!!
+              Please Add Your Task!! (Task limit is 10)
             </Typography>
             <form onSubmit={handleSubmit}>
               <Paper
