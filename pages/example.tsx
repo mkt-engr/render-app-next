@@ -22,7 +22,7 @@ import { Task } from "../@types/type";
 type Props = {
   staticTasks: Task[];
 };
-//TODO: タスクをDBに追加→レスポンスのタスクをuseStateに保存
+
 //TODO:RHFでonSubmitした時に値を取得する
 //TODO:タスクがDoneになった時テキストに線を入れる
 //TODO:Editボタン押したらモーダルで編集できるように
@@ -41,11 +41,26 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
       headers: { "Accept-Encoding": "gzip,deflate,compress" },
     };
     const { data } = await axios(options);
-    console.log(data);
     setTasks((prev) => {
       return [...prev, data];
     });
     setNewTask("");
+  };
+
+  const handleDelete = async (id: number) => {
+    console.log("handleDelete", id);
+    const options: AxiosRequestConfig = {
+      url: `api/task/${id}`,
+      method: "DELETE",
+      headers: { "Accept-Encoding": "gzip,deflate,compress" },
+    };
+    const { data } = await axios(options);
+    setTasks((prev) => {
+      const newTasks = prev.filter((task) => {
+        return task.id !== data.id;
+      });
+      return newTasks;
+    });
   };
 
   const handleTaskStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +133,6 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                         }
                         label={task.content}
                       />
-                      {/* <ListItemText primary={task.content} /> */}
                       <Box sx={{ ml: "auto" }}>
                         <IconButton
                           edge="end"
@@ -129,7 +143,13 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                         >
                           <EditIcon />
                         </IconButton>
-                        <IconButton edge="end" aria-label="delete">
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => {
+                            handleDelete(task.id);
+                          }}
+                        >
                           <DeleteIcon />
                         </IconButton>
                       </Box>
@@ -155,7 +175,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
 export default Example;
 
 export const getServerSideProps: GetStaticProps = async () => {
-  const res = await axios.get(`${process.env.HOST}/task`, {
+  const res = await axios.get(`${process.env.HOST}/tasks`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
   });
 
