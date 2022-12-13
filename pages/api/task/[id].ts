@@ -16,8 +16,10 @@ export default async function taskHandler(
       const optionsPatch = {
         url: `${process.env.HOST}/tasks/${id}`,
         method: "PATCH",
+        headers: { "Accept-Encoding": "gzip,deflate,compress" },
         data: body,
       };
+      console.log(body, "PATCH");
       const r1: AxiosResponse<number> = await axios(optionsPatch);
       const { data: patchedId } = r1;
       res.status(200).json(patchedId);
