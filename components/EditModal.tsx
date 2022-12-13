@@ -24,9 +24,8 @@ type Props = {
 };
 const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
   const [editedContent, setEditedContent] = useState(task?.content || "");
-  console.log({ editedContent }, "EditModalの最初");
+  console.log({ task: task.content, editedContent }, "EditModalの最初");
   const handleClose = () => {
-    setEditedContent(task.content);
     setOpen(false);
   };
   const handleSubmit = (
@@ -41,7 +40,6 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
       console.log("タスクの中身は変更されてない");
       return;
     }
-    setEditedContent(editedContent);
 
     handleSave(task, editedContent);
   };
@@ -91,9 +89,8 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
             margin="dense"
             fullWidth
             variant="standard"
-            defaultValue={editedContent}
+            defaultValue={task.content}
             onChange={(e) => {
-              // console.log(e.target.value, "TextField");
               setEditedContent(e.target.value);
             }}
           />
