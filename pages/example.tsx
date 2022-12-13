@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   Box,
   Checkbox,
@@ -17,14 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import { SyntheticEvent, useState } from "react";
 import EditModal from "../components/EditModal";
-
-type Task = {
-  id: number;
-  content: string;
-  done: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-};
+import { Task } from "../@types/type";
 
 type Props = {
   staticTasks: Task[];
@@ -36,10 +29,23 @@ type Props = {
 //TODO:ゴミ箱ボタン押したら物理削除する
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
+  const [newTask, setNewTask] = useState("");
   const [selectedTask, setSelectedTask] = useState(staticTasks[0]);
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("handleSubmit", e);
+    console.log("handleSubmit");
+    const options: AxiosRequestConfig = {
+      url: "api/task",
+      method: "POST",
+      data: { content: newTask },
+      headers: { "Accept-Encoding": "gzip,deflate,compress" },
+    };
+    const { data } = await axios(options);
+    console.log(data);
+    setTasks((prev) => {
+      return [...prev, data];
+    });
+    setNewTask("");
   };
 
   const handleTaskStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +88,11 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                   sx={{ ml: 1, flex: 1 }}
                   placeholder="New Task"
                   inputProps={{ "aria-label": "new task" }}
+                  value={newTask}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setNewTask(e.target.value);
+                  }}
                 />
                 <IconButton
                   type="button"
@@ -144,8 +155,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
 export default Example;
 
 export const getServerSideProps: GetStaticProps = async () => {
-  console.log(process.env.HOST, "HOST");
-  const res = await axios.get(`${process.env.HOST}/tasks`, {
+  const res = await axios.get(`${process.env.HOST}/task`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
   });
 
