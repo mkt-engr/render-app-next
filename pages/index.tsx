@@ -128,6 +128,9 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                         label={task.content}
                         sx={{
                           textDecoration: task.done ? "line-through" : "auto",
+                          wordBreak: "break-word",
+                          flex: 1,
+                          mr: 0,
                         }}
                       />
                       <Box sx={{ ml: "auto", mr: "4px" }}>
