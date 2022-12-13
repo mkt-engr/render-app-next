@@ -6,15 +6,13 @@ export default async function taskHandler(
   res: NextApiResponse
 ) {
   const {
-    query: { id, name },
+    query: { id },
     method,
     body,
   } = req;
   switch (method) {
     case "PATCH":
-      // Get data from your database
-      console.log("PATCH api routes", id, body);
-
+      // Update data
       const optionsPatch = {
         url: `${process.env.HOST}/tasks/${id}`,
         method: "PATCH",
@@ -25,16 +23,10 @@ export default async function taskHandler(
       const { data: patchedId } = r1;
       console.log(patchedId, "patch");
       res.status(200).json(patchedId);
-      // res.status(200).json(5624);
       break;
-    case "PUT":
-      // Update or create data in your database
-      res.status(200).json({ id, name: name || `User ${id}` });
-      break;
-    case "DELETE":
-      // Update or create data in your database
-      console.log("DELETE api routes", id);
 
+    case "DELETE":
+      // Delete data in your database
       const optionsDelete = {
         url: `${process.env.HOST}/tasks/${id}`,
         method: "DELETE",
@@ -42,11 +34,11 @@ export default async function taskHandler(
       };
       const r3: AxiosResponse<number> = await axios(optionsDelete);
       const { data: deletedId } = r3;
-      console.log(deletedId, "delete");
       res.status(200).json(deletedId);
       break;
+
     default:
-      res.setHeader("Allow", ["GET", "PUT"]);
+      res.setHeader("Allow", ["PATCH", "DELETE"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

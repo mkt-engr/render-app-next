@@ -28,7 +28,6 @@ const EditModal = ({ open, setOpen, task, setTasks }: any) => {
 
   const handleSave = async (id: string, editedContent: string) => {
     handleClose();
-    console.log(id, editedContent, "editmodal handlesave");
 
     const options: AxiosRequestConfig = {
       url: `api/task/${id}`,
@@ -36,7 +35,9 @@ const EditModal = ({ open, setOpen, task, setTasks }: any) => {
       headers: { "Accept-Encoding": "gzip,deflate,compress" },
       data: { content: editedContent },
     };
+
     const { data } = await axios(options);
+
     setTasks((prevTasks: Task[]) => {
       const newTasks = prevTasks.map((task) => {
         if (task.id !== data.id) return task;
