@@ -26,7 +26,7 @@ type Props = {
 //TODO:RHFでonSubmitした時に値を取得する
 //TODO:タスクがDoneになった時テキストに線を入れる
 //TODO:Editボタン押したらモーダルで編集できるように
-//TODO:ゴミ箱ボタン押したら物理削除する
+
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
   const [newTask, setNewTask] = useState("");

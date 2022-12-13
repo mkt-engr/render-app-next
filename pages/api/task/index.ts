@@ -38,10 +38,10 @@ export default async function handler(
       const { data: dataPost } = r2;
       res.status(200).json(dataPost);
       break;
-    case "PUT":
-      // Update or create data in your database
-      res.status(200).json(dataPost);
-      break;
+    // case "PUT":
+    //   // Update or create data in your database
+    //   res.status(200).json(dataPost);
+    //   break;
     default:
       res.setHeader("Allow", ["GET", "PUT"]);
       res.status(405).end(`Method ${method} Not Allowed`);
