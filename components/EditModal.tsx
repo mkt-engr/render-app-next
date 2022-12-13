@@ -23,7 +23,7 @@ type Props = {
   setTasks: Dispatch<SetStateAction<Task[]>>;
 };
 const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
-  const [editedContent, setEditedContent] = useState(task.content);
+  const [editedContent, setEditedContent] = useState(task?.content || "");
 
   const handleClose = () => {
     setEditedContent(task.content);
@@ -80,7 +80,7 @@ const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
             margin="dense"
             fullWidth
             variant="standard"
-            defaultValue={task.content}
+            defaultValue={task?.content || ""}
             onChange={(e) => {
               setEditedContent(e.target.value);
             }}
