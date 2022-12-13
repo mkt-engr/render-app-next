@@ -7,10 +7,22 @@ import {
   Button,
 } from "@mui/material";
 import axios, { AxiosRequestConfig } from "axios";
-import React, { FC, SyntheticEvent, useState } from "react";
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  SyntheticEvent,
+  useState,
+} from "react";
 import { Task } from "../@types/type";
 
-const EditModal = ({ open, setOpen, task, setTasks }: any) => {
+type Props = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  task: Task;
+  setTasks: Dispatch<SetStateAction<Task[]>>;
+};
+const EditModal: FC<Props> = ({ open, setOpen, task, setTasks }) => {
   const [editedContent, setEditedContent] = useState(task.content);
 
   const handleClose = () => {
@@ -19,14 +31,14 @@ const EditModal = ({ open, setOpen, task, setTasks }: any) => {
   };
   const handleSubmit = (
     e: SyntheticEvent,
-    id: string,
+    id: number,
     editedContent: string
   ) => {
     e.preventDefault();
     handleSave(id, editedContent);
   };
 
-  const handleSave = async (id: string, editedContent: string) => {
+  const handleSave = async (id: number, editedContent: string) => {
     handleClose();
 
     const options: AxiosRequestConfig = {

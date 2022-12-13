@@ -159,7 +159,6 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
       </Box>
 
       <EditModal
-        handleClickOpen={handleClickOpen}
         open={open}
         setOpen={setOpen}
         task={selectedTask}
