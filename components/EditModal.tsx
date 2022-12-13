@@ -2,26 +2,48 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
   Button,
 } from "@mui/material";
-import React, { FC, useState } from "react";
+import axios, { AxiosRequestConfig } from "axios";
+import React, { FC, SyntheticEvent, useState } from "react";
+import { Task } from "../@types/type";
 
-const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
+const EditModal = ({ open, setOpen, task, setTasks }: any) => {
   const [editedContent, setEditedContent] = useState(task.content);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
   const handleClose = () => {
+    setEditedContent(task.content);
     setOpen(false);
   };
+  const handleSubmit = (
+    e: SyntheticEvent,
+    id: string,
+    editedContent: string
+  ) => {
+    e.preventDefault();
+    handleSave(id, editedContent);
+  };
 
-  const handleSave = (id: string, editedContent: string) => {
-    // handleClose();
+  const handleSave = async (id: string, editedContent: string) => {
+    handleClose();
     console.log(id, editedContent, "editmodal handlesave");
+
+    const options: AxiosRequestConfig = {
+      url: `api/task/${id}`,
+      method: "PATCH",
+      headers: { "Accept-Encoding": "gzip,deflate,compress" },
+      data: { content: editedContent },
+    };
+    const { data } = await axios(options);
+    setTasks((prevTasks: Task[]) => {
+      const newTasks = prevTasks.map((task) => {
+        if (task.id !== data.id) return task;
+        return { ...task, content: editedContent };
+      });
+      return newTasks;
+    });
   };
 
   return (
@@ -33,30 +55,36 @@ const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
       fullWidth
       maxWidth={"sm"}
     >
-      <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          fullWidth
-          variant="standard"
-          defaultValue={task.content}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setEditedContent(e.target.value);
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          onClick={() => {
-            handleSave(task.id, editedContent);
-          }}
-        >
-          Save
-        </Button>
-        <Button onClick={handleClose}>Cancel</Button>
-      </DialogActions>
+      <form
+        onSubmit={(e) => {
+          handleSubmit(e, task.id, editedContent);
+        }}
+      >
+        <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            fullWidth
+            variant="standard"
+            defaultValue={task.content}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setEditedContent(e.target.value);
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              handleSave(task.id, editedContent);
+            }}
+          >
+            Save
+          </Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

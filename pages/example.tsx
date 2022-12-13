@@ -25,7 +25,6 @@ type Props = {
 
 //TODO:RHFでonSubmitした時に値を取得する
 //TODO:タスクがDoneになった時テキストに線を入れる
-//TODO:Editボタン押したらモーダルで編集できるように
 
 const Example: NextPage<Props> = ({ staticTasks }) => {
   const [tasks, setTasks] = useState(staticTasks);
@@ -138,8 +137,6 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                           edge="end"
                           aria-label="edit"
                           onClick={() => {
-                            console.log(task, "editbutton");
-
                             handleClickOpen(task);
                           }}
                         >
@@ -169,6 +166,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
         open={open}
         setOpen={setOpen}
         task={selectedTask}
+        setTasks={setTasks}
       />
     </>
   );
