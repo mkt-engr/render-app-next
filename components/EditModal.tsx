@@ -10,15 +10,20 @@ import {
 import React, { FC, useState } from "react";
 
 const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
-  // const [open, setOpen] = useState(false);
+  const [editedContent, setEditedContent] = useState(task.content);
 
   // const handleClickOpen = () => {
   //   setOpen(true);
   // };
-
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSave = (id: string, editedContent: string) => {
+    // handleClose();
+    console.log(id, editedContent, "editmodal handlesave");
+  };
+
   return (
     <Dialog
       open={open}
@@ -30,18 +35,26 @@ const EditModal = ({ handleClickOpen, open, setOpen, task }: any) => {
     >
       <DialogTitle id="alert-dialog-title">Edit Task</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          <TextField
-            autoFocus
-            margin="dense"
-            fullWidth
-            variant="standard"
-            defaultValue={task.content}
-          />
-        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          fullWidth
+          variant="standard"
+          defaultValue={task.content}
+          onChange={(e) => {
+            console.log(e.target.value);
+            setEditedContent(e.target.value);
+          }}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Save</Button>
+        <Button
+          onClick={() => {
+            handleSave(task.id, editedContent);
+          }}
+        >
+          Save
+        </Button>
         <Button onClick={handleClose}>Cancel</Button>
       </DialogActions>
     </Dialog>

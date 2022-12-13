@@ -10,7 +10,7 @@ export default async function taskHandler(
     method,
   } = req;
   switch (method) {
-    case "GET":
+    case "PATCH":
       // Get data from your database
       res.status(200).json({ id, name: `User ${id}` });
       break;

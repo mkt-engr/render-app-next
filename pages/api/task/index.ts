@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Task } from "../../../@types/type";
 
@@ -14,21 +14,19 @@ export default async function handler(
     case "GET":
       console.log(process.env.HOST, "api routes");
       // Get data from your database
-      const options = {
+      const options: AxiosRequestConfig = {
         url: `${process.env.HOST}/tasks`,
         method: "GET",
         headers: { "Accept-Encoding": "gzip,deflate,compress" },
       };
-      const r: AxiosResponse<Task[]> = await axios.get(
-        `${process.env.HOST}/tasks`
-      );
+      const r: AxiosResponse<Task[]> = await axios(options);
       const { data, status } = r;
       res.status(200).json(data);
       break;
     case "POST":
       console.log("POST", body);
       // Get data from your database
-      const optionsPost = {
+      const optionsPost: AxiosRequestConfig = {
         url: `${process.env.HOST}/tasks`,
         method: "POST",
         data: body,

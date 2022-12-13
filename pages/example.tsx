@@ -138,6 +138,8 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
                           edge="end"
                           aria-label="edit"
                           onClick={() => {
+                            console.log(task, "editbutton");
+
                             handleClickOpen(task);
                           }}
                         >
