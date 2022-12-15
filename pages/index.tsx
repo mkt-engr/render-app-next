@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import axios, { AxiosRequestConfig } from "axios";
 import {
   Box,
@@ -149,7 +149,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
 
 export default Example;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const res = await axios.get(`${process.env.HOST}/tasks`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
   });
