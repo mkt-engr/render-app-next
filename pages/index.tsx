@@ -149,7 +149,7 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
 
 export default Example;
 
-export const getServerSideProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get(`${process.env.HOST}/tasks`, {
     headers: { "Accept-Encoding": "gzip,deflate,compress" },
   });
