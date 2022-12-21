@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { SyntheticEvent, useState } from "react";
 import { Task } from "../@types/type";
+import HeadComponent from "../component/HeadComponent";
 
 type Props = {
   staticTasks: Task[];
@@ -71,79 +72,82 @@ const Example: NextPage<Props> = ({ staticTasks }) => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
-      <Grid container spacing={0}>
-        <Grid item xs={12} md={12}>
-          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
-            Please Add Your Task!! (Task limit is 10)
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <Paper
-              sx={{
-                p: "2px 4px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="New Task"
-                inputProps={{ "aria-label": "new task" }}
-                value={newTask}
-                onChange={(e) => {
-                  setNewTask(e.target.value);
+    <>
+      <HeadComponent />
+      <Box sx={{ flexGrow: 1, maxWidth: 500, mx: "auto" }}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} md={12}>
+            <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+              Please Add Your Task!! (Task limit is 10)
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <Paper
+                sx={{
+                  p: "2px 4px",
+                  display: "flex",
+                  alignItems: "center",
                 }}
-              />
-              <IconButton
-                type="button"
-                sx={{ p: "10px" }}
-                aria-label="search"
-                onClick={handleSubmit}
               >
-                <AddIcon />
-              </IconButton>
-            </Paper>
-            <List>
-              {tasks.map((task) => {
-                return (
-                  <ListItem key={task.id}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={task.done}
-                          value={task.id}
-                          onChange={handleTaskStatus}
-                        />
-                      }
-                      label={task.content}
-                      sx={{
-                        textDecoration: task.done ? "line-through" : "auto",
-                        wordBreak: "break-word",
-                        flex: 1,
-                        mr: 0,
-                      }}
-                    />
-                    <Box sx={{ ml: "auto", mr: "4px" }}>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => {
-                          setDeletedTaskId(task.id);
-                          handleDelete(task.id);
+                <InputBase
+                  sx={{ ml: 1, flex: 1 }}
+                  placeholder="New Task"
+                  inputProps={{ "aria-label": "new task" }}
+                  value={newTask}
+                  onChange={(e) => {
+                    setNewTask(e.target.value);
+                  }}
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "10px" }}
+                  aria-label="search"
+                  onClick={handleSubmit}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Paper>
+              <List>
+                {tasks.map((task) => {
+                  return (
+                    <ListItem key={task.id}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={task.done}
+                            value={task.id}
+                            onChange={handleTaskStatus}
+                          />
+                        }
+                        label={task.content}
+                        sx={{
+                          textDecoration: task.done ? "line-through" : "auto",
+                          wordBreak: "break-word",
+                          flex: 1,
+                          mr: 0,
                         }}
-                        disabled={task.id === deletedTaskId}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </form>
+                      />
+                      <Box sx={{ ml: "auto", mr: "4px" }}>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => {
+                            setDeletedTaskId(task.id);
+                            handleDelete(task.id);
+                          }}
+                          disabled={task.id === deletedTaskId}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </form>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 };
 
